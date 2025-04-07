@@ -18,7 +18,7 @@ public class BeanCounter {
         return result ->{
             String[] beans = context.getBeanDefinitionNames();
             LOGGER.info("total beans created : {}", beans.length);
-            Arrays.stream(beans).forEach(name -> System.out.println(name));
+//            Arrays.stream(beans).forEach(name -> System.out.println(name));
         };
     }
 }

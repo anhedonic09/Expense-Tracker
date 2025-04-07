@@ -1,0 +1,166 @@
+{
+	"info": {
+		"_postman_id": "8ef1d7b6-7fb9-46ad-b4e2-02a99e986661",
+		"name": "ExpenseTracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24633488"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"akashbisht0917@gmail.com\",\r\n    \"password\":\"NoobCoder@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{expenseTrackerLocal}}/api/v1/user/signup",
+							"host": [
+								"{{expenseTrackerLocal}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"akashbisht0917@gmail.com\",\r\n    \"password\":\"NoobCoder@123\",\r\n    \"username\":\"CD6969\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{expenseTrackerLocal}}/api/v1/user/login",
+							"host": [
+								"{{expenseTrackerLocal}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "expense",
+			"item": [
+				{
+					"name": "create expense entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":5830.69,\r\n    \"category\":\"essentials\",\r\n    \"modeOfPayment\":\"UPI\",\r\n    \"description\":\"Abibas shoes\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{expenseTrackerLocal}}/api/v1/expense/create/{username}",
+							"host": [
+								"{{expenseTrackerLocal}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expense",
+								"create",
+								"{username}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update expense details",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":5830.69,\r\n    \"category\":\"essentials\",\r\n    \"modeOfPayment\":\"UPI\",\r\n    \"description\":\"Abibas shoes\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{expenseTrackerLocal}}/api/v1/expense/create/{username}",
+							"host": [
+								"{{expenseTrackerLocal}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expense",
+								"create",
+								"{username}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete expense details",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{expenseTrackerLocal}}/api/v1/expense/delete/{username}/{expenseId}",
+							"host": [
+								"{{expenseTrackerLocal}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expense",
+								"delete",
+								"{username}",
+								"{expenseId}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "expenseTrackerLocal",
+			"value": "http://localhost:1712"
+		}
+	]
+}

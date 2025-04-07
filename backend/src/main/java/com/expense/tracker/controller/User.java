@@ -20,34 +20,24 @@ import java.util.UUID;
 
 public class User {
 
-    @Autowired
-    PBKDF2Util pbkdf2Util;
+    private final UserService userService;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    CommonResponse commonResponse;
+    public User(UserService userService) {
+        this.userService = userService;
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(User.class);
 
     @PostMapping("/signup")
-    public Map<String, Object> saveUserInfo(@RequestBody UserProfile userProfile) throws Exception {
+    public Map<String, Object> saveUserInfo(@RequestBody UserProfile userProfile){
         LOGGER.info("/signup endpoint triggered...");
         String password = userProfile.getPassword();
         if (StringUtils.hasText(password) && StringUtils.hasText(userProfile.getEmail())) {
             LOGGER.info("fetching existing profile with email if exists....");
             UserProfile existingProfile = userService.findInUserProfileUsingEmail(userProfile.getEmail());
             if (existingProfile == null) {
-                String[] hashPasswordDetails = pbkdf2Util.hashPassword(password);
-                String saltUsed = hashPasswordDetails[0];
-                String hashUsed = hashPasswordDetails[1];
-                userProfile.setPassword(pbkdf2Util.hashPassword(password, pbkdf2Util.generateSalt()));
-                userProfile.setHash_used(hashUsed);
-                userProfile.setSalt_used(saltUsed);
-                LOGGER.info("saving profile....");
-                String uniqueUsername = userService.saveUserDetailsToDB(userProfile);
-                return commonResponse.responseOnSuccess(uniqueUsername, HttpStatus.OK.value(), "user saved successfully");
+                return userService.saveUserDetailsToDB(userProfile, password);
             }else{
                 LOGGER.info("email already registered....");
                 throw new EmailAlreadyExistException("email already registered");
@@ -58,7 +48,7 @@ public class User {
         }
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public Map<String, Object> getUserInfo(@RequestBody UserProfile userProfile) throws Exception {
         LOGGER.info("/login endpoint triggered...");
         String password = userProfile.getPassword();
@@ -66,20 +56,7 @@ public class User {
             LOGGER.info("fetching existing profile with username & email....");
             UserProfile existingProfile = userService.findInUserProfileUsingUsernameAndEmail(userProfile.getUsername(), userProfile.getEmail());
             if (existingProfile != null) {
-                String[] hashPasswordDetails = pbkdf2Util.hashPassword(password);
-                String saltUsed = hashPasswordDetails[0];
-                String hashUsed = hashPasswordDetails[1];
-                if (Boolean.TRUE.equals(
-                        pbkdf2Util.verifyPassword(password, saltUsed, hashUsed))
-                ) {
-                    existingProfile.setPassword("");
-                    existingProfile.setHash_used("");
-                    existingProfile.setSalt_used("");
-                    return commonResponse.responseOnSuccess(existingProfile, HttpStatus.OK.value(), "data fetch successfully");
-                } else {
-                    LOGGER.info("password not match....");
-                    throw new PasswordMismatchException("password not match");
-                }
+                return userService.verifyUserDetails(password, existingProfile);
             }else {
                 LOGGER.info("no such user found....");
                 throw new UserNotFoundException("no such user found");
